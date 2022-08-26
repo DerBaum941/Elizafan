@@ -1,7 +1,19 @@
-import fs from 'fs';
-import path from 'path';
+import Discord from 'discord.js';
 import c from '../logman.js';
 
-const authpath = path.resolve('./conf/token.json');
-const tokenfile = JSON.parse(fs.readFileSync(authpath, 'utf8'));
+const intents = [
+    Discord.GatewayIntentBits.Guilds,
+    Discord.GatewayIntentBits.GuildMembers,
+    Discord.GatewayIntentBits.GuildMessages,
+    Discord.GatewayIntentBits.GuildMessageReactions,
+    Discord.GatewayIntentBits.MessageContent,
+    Discord.GatewayIntentBits.DirectMessages
+]
 
+const bot = new Discord.Client({intents});
+
+
+
+function init() {
+    bot.login(process.env.DISCORD_TOKEN);
+}
