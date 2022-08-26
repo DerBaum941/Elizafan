@@ -17,3 +17,5 @@ const bot = new Discord.Client({intents});
 function init() {
     bot.login(process.env.DISCORD_TOKEN);
 }
+
+export default init;
