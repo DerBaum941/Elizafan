@@ -1,9 +1,11 @@
-import { main } from "src";
+import main from "./src/index.js";
 
-while (1) {
+function loop() {
     try {
         main();
     } catch (e) {
-        Console.error("Encoutered runtime error:\n" + e);
+        console.error("Encountered runtime error:\n" + e);
+        setTimeout(loop, 2500);
     }
 }
+loop();

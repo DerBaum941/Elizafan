@@ -1,7 +1,7 @@
 const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
-const conf = require('./../../conf/general.json').logs;
+const conf = require('../conf/general.json').logs;
 const logpath = path.resolve('./logs/');
 
 const process = require('process');

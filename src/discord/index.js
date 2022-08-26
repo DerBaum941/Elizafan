@@ -1,5 +1,5 @@
 import Discord from 'discord.js';
-import c from '../logman.js';
+import c from '../logman.cjs';
 
 const intents = [
     Discord.GatewayIntentBits.Guilds,
@@ -9,13 +9,22 @@ const intents = [
     Discord.GatewayIntentBits.MessageContent,
     Discord.GatewayIntentBits.DirectMessages
 ]
-
-const bot = new Discord.Client({intents});
-
-
-
-function init() {
-    bot.login(process.env.DISCORD_TOKEN);
+const presence = {
+    status: 'dnd',
+    activities: [{
+        name: 'your mom.',
+        type: Discord.ActivityType.Watching
+    }]
 }
 
-export default init;
+export const bot = new Discord.Client({intents,presence});
+
+export function init() {
+    bot.login(process.env.DISCORD_TOKEN);
+    import("./interact.js");
+    import("./message.js");
+}
+
+bot.once("ready", ()=>{
+    c.inf(`Logged into Discord API as ${bot.user.tag}`);
+})

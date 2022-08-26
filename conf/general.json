@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "loglevels": ["debug", "info", "warning", "error", "none"],
+        "loglevel_console": "debug",
+        "loglevel_file": "debug",
+        "add_timestamp": true,
+        "always_trace": false,
+        "log_to_file": true,
+        "retentionDays": -1
+    }
+}
