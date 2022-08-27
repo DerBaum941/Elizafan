@@ -11,11 +11,8 @@ apt-get install -y git
 
 #Move Folder
 mkdir -p /opt/node/dadbot/
-#cp -R ./* /opt/node/dadbot/
+cp -R ./* /opt/node/dadbot/
 cd /opt/node/dadbot/
-git clone https://github.com/DerBaum941/Dad.git .
-mv ./Dad/* ./
-mv ./Dad/.* ./
 
 #Just incase
 mkdir /opt/node/dadbot/conf
@@ -45,5 +42,5 @@ touch /etc/systemd/system/dadbot.service
 cp ./dadbot.service /etc/systemd/system/dadbot.service
 #start service
 systemctl daemon-reload
-systemctl enable dairs
-systemctl start dairs
+systemctl enable dadbot
+systemctl start dadbot
