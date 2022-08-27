@@ -14,6 +14,8 @@ mkdir -p /opt/node/dadbot/
 #cp -R ./* /opt/node/dadbot/
 cd /opt/node/dadbot/
 git clone https://github.com/DerBaum941/Dad.git .
+mv ./Dad/* ./
+mv ./Dad/.* ./
 
 #Just incase
 mkdir /opt/node/dadbot/conf
