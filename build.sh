@@ -2,14 +2,19 @@
 
 #Prompt token to store
 echo "Please provide the Discord Bot Token"
-read -sp 'Token: ' discord_token
+read -p 'Token: ' discord_token
 
+#Ensure repos are current and git is installed
 apt-get update
 apt-get upgrade -y
+apt-get install -y git
+
 #Move Folder
-mkdir /opt/node/dadbot
-cp -R ./* /opt/node/dadbot/
+mkdir -p /opt/node/dadbot/
+#cp -R ./* /opt/node/dadbot/
 cd /opt/node/dadbot/
+git clone https://github.com/DerBaum941/Dad.git
+
 #Just incase
 mkdir /opt/node/dadbot/conf
 mkdir /opt/node/dadbot/logs
