@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#Prompt token to store
+echo "Please provide the Discord Bot Token"
+read -sp 'Token: ' discord_token
+
 apt-get update
 apt-get upgrade -y
 #Move Folder
@@ -10,6 +15,10 @@ mkdir /opt/node/dadbot/conf
 mkdir /opt/node/dadbot/logs
 mkdir /opt/node/dadbot/.sqlite
 mkdir /opt/node/dadbot/.sqlite/backups
+
+#Save token to file
+touch /opt/node/dadbot/.env
+echo "DISCORD_TOKEN=$discord_token" > .env
 
 #Install Node
 curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
