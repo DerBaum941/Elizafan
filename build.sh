@@ -13,7 +13,7 @@ apt-get install -y git
 mkdir -p /opt/node/dadbot/
 #cp -R ./* /opt/node/dadbot/
 cd /opt/node/dadbot/
-git clone https://github.com/DerBaum941/Dad.git
+git clone https://github.com/DerBaum941/Dad.git .
 
 #Just incase
 mkdir /opt/node/dadbot/conf
