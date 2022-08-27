@@ -47,8 +47,9 @@ function mentioned(msg) {
 }
 
 function message(msg) {
-    const re_for_im = /I[ ']?a?m (?<text>\w* ?\w*) */gmi
+    const re_for_im = /[^\w]+I[ ']?a?m (?<text>\w* ?\w*) */gmi
     
+    //----------------- Check for "I am" - joke
     var res = re_for_im.exec(msg.content);
     res = res?.groups?.text;
     if (res) {
@@ -59,6 +60,47 @@ function message(msg) {
         incrJokeCount.run("I'm");
         msg.channel.send(text);
     }
+
+    //------------------ Check for "I love" reply
+    const love_re = /I .*love (?<text>[\w ]*).*$/gi
+    var res = re_for_im.exec(msg.content);
+    res = res?.groups?.text;
+    if (res) {
+        if (Math.random() > replies.odds["I love"]) return;
+
+        var text = pickRandom(replies.replies["I love"]);
+        text = text.replaceAll("<TEXT>", res);
+        incrJokeCount.run("I love");
+        msg.reply({content: text, allowedMentions: {
+            repliedUser: false
+        }});
+    }
+
+    //------------------ Check for "I will" reply
+
+    const will_re = /I will/gmi;
+    if (will_re.test(msg.content)) {
+        if (Math.random() > replies.odds["I will"]) return;
+
+        var text = pickRandom(replies.replies["I will"]);
+        incrJokeCount.run("I will");
+        msg.reply({content: text, allowedMentions: {
+            repliedUser: false
+        }});
+    }
+
+    //------------------ Check for "It will" reply
+
+    const willit_re = /It will/gmi;
+    if (will_re.test(msg.content)) {
+        if (Math.random() > replies.odds["It will"]) return;
+
+        var text = pickRandom(replies.replies["It will"]);
+        incrJokeCount.run("It will");
+        msg.reply({content: text, allowedMentions: {
+            repliedUser: false
+        }});
+    }
 }
 
 function pickRandom(array) {
@@ -66,10 +108,10 @@ function pickRandom(array) {
     return array[i];
 }
 
-const keys = ["I'm", "I love", "I will"];
+const keys = ["I'm", "I love", "I will", "It will"];
 function setupCounters() {
     keys.forEach(key => {
-        if (!fetchJokeCount.get(key)) 
+        if (fetchJokeCount.get(key) === null)
             addJokeCount.run(key);
     });
 }
