@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 import c from '../logman.cjs';
 import { bot } from './index.js';
+import axios from 'axios';
 
 //Hug, Pat, Cuddle, Kiss, Boop
 //https://some-random-api.ml/
@@ -10,7 +11,7 @@ const COMMANDS = [
     description: "hug someone",
     type: "CHAT_INPUT",
     options: [{
-        name: "User",
+        name: "user",
         description: "Who you wanna hug",
         type: "USER",
         required: true
@@ -21,51 +22,82 @@ const COMMANDS = [
     description: "pat someone",
     type: "CHAT_INPUT",
     options: [{
-        name: "User",
+        name: "user",
         description: "Who you wanna pat",
-        type: "USER",
-        required: true
-    }]
-},
-{
-    name: "cuddle",
-    description: "cuddle someone",
-    type: "CHAT_INPUT",
-    options: [{
-        name: "User",
-        description: "Who you wanna cuddle",
-        type: "USER",
-        required: true
-    }]
-},
-{
-    name: "kiss",
-    description: "kiss someone",
-    type: "CHAT_INPUT",
-    options: [{
-        name: "User",
-        description: "Who you wanna kiss",
-        type: "USER",
-        required: true
-    }]
-},
-{
-    name: "boop",
-    description: "boop someone",
-    type: "CHAT_INPUT",
-    options: [{
-        name: "User",
-        description: "Who you wanna boop",
         type: "USER",
         required: true
     }]
 }
 ];
 
+const Picked_Endpoints = [
+    "blush",
+    "confused",
+    "cry",
+    "cuddle",
+    "evillaugh",
+    "facepalm",
+    "handhold",
+    "hug",
+    "kiss",
+    "lick",
+    "love",
+    "mad",
+    "nervous",
+    "no",
+    "nom",
+    "pat",
+    "peek",
+    "poke",
+    "pout",
+    "shrug",
+    "sigh",
+    "sweat",
+    "yes"
+].slice(0,24);
 
-export function setup() {
-    //Clear existing commands
+
+export async function setup() {
+    //Override existing commands
     bot.application.commands.set(COMMANDS);
+
+    //Setup gifs command
+    const result = await axios.get('https://api.otakugifs.xyz/gif/allreactions');
+    if (result.status==200) {
+        const { reactions } = result;
+
+        var choices = [];
+        reactions.forEach(react => {
+            if (Picked_Endpoints.includes(react)) {
+                choices.push({name: react, value: react});
+            }
+        });
+
+        const gifs = {
+            name: "gifs",
+            description: "reactions gifs",
+            type: "CHAT_INPUT",
+            options:[
+                {
+                    name: "user",
+                    description: "Who you wanna react to",
+                    type: "USER",
+                    required: true
+                },
+                {
+                    name: "gif",
+                    description: "Choose what kind of gif to use",
+                    type: "STRING",
+                    choices: choices,
+                    required: true
+                }
+            ]
+        };
+
+        bot.application.commands.create(gifs);
+    } else {
+        c.inf("Couldn't access Endpoint otakugifs, skipping.");
+    }
 
     c.inf("Successfully registed all commands!");
 }
