@@ -10,18 +10,18 @@ apt-get upgrade -y
 apt-get install -y git
 
 #Move Folder
-mkdir -p /opt/node/dadbot/
-cp -R ./* /opt/node/dadbot/
-cd /opt/node/dadbot/
+mkdir -p /opt/node/elizafan/
+cp -R ./* /opt/node/elizafan/
+cd /opt/node/elizafan/
 
 #Just incase
-mkdir /opt/node/dadbot/conf
-mkdir /opt/node/dadbot/logs
-mkdir /opt/node/dadbot/.sqlite
-mkdir /opt/node/dadbot/.sqlite/backups
+mkdir /opt/node/elizafan/conf
+mkdir /opt/node/elizafan/logs
+mkdir /opt/node/elizafan/.sqlite
+mkdir /opt/node/elizafan/.sqlite/backups
 
 #Save token to file
-touch /opt/node/dadbot/.env
+touch /opt/node/elizafan/.env
 echo "DISCORD_TOKEN=$discord_token" > .env
 
 #Install Node
@@ -32,15 +32,15 @@ apt install build-essential
 npm install
 
 #add service user
-useradd dadbot
+useradd elizafan
 groupadd node
-chown -R dadbot:node /opt/node/dadbot/
+chown -R elizafan:node /opt/node/elizafan/
 #make executable
-chmod +x /opt/node/dadbot/index.js
-touch /etc/systemd/system/dadbot.service
+chmod +x /opt/node/elizafan/index.js
+touch /etc/systemd/system/elizafan.service
 #install service
-cp ./dadbot.service /etc/systemd/system/dadbot.service
+cp ./elizafan.service /etc/systemd/system/elizafan.service
 #start service
 systemctl daemon-reload
-systemctl enable dadbot
-systemctl start dadbot
+systemctl enable elizafan
+systemctl start elizafan

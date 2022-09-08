@@ -1,2 +1,2 @@
-# Dad
-The father your discord server never had
+# Elizafan
+Go support ElizaVTuber !!!
