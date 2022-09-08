@@ -5,26 +5,26 @@ import axios from 'axios';
 
 //Hug, Pat, Cuddle, Kiss, Boop
 //https://some-random-api.ml/
-const COMMANDS = [
+var COMMANDS = [
 {
     name: "hug",
     description: "hug someone",
-    type: "CHAT_INPUT",
+    type: 1,
     options: [{
         name: "user",
         description: "Who you wanna hug",
-        type: "USER",
+        type: 6, //User
         required: true
     }]
 },
 {
     name: "pat",
     description: "pat someone",
-    type: "CHAT_INPUT",
+    type: 1,
     options: [{
         name: "user",
         description: "Who you wanna pat",
-        type: "USER",
+        type: 6, //User
         required: true
     }]
 }
@@ -58,16 +58,13 @@ const Picked_Endpoints = [
 
 
 export async function setup() {
-    //Override existing commands
-    bot.application.commands.set(COMMANDS);
 
     //Setup gifs command
     const result = await axios.get('https://api.otakugifs.xyz/gif/allreactions');
     if (result.status==200) {
-        const { reactions } = result;
 
         var choices = [];
-        reactions.forEach(react => {
+        result.data.reactions.forEach(react => {
             if (Picked_Endpoints.includes(react)) {
                 choices.push({name: react, value: react});
             }
@@ -76,28 +73,31 @@ export async function setup() {
         const gifs = {
             name: "gifs",
             description: "reactions gifs",
-            type: "CHAT_INPUT",
+            type: 1,
             options:[
                 {
                     name: "user",
                     description: "Who you wanna react to",
-                    type: "USER",
+                    type: 6, //User
                     required: true
                 },
                 {
                     name: "gif",
                     description: "Choose what kind of gif to use",
-                    type: "STRING",
+                    type: 3, //String
                     choices: choices,
                     required: true
                 }
             ]
         };
 
-        bot.application.commands.create(gifs);
+        COMMANDS.push(gifs);
     } else {
         c.inf("Couldn't access Endpoint otakugifs, skipping.");
     }
+    
+    //Override existing commands
+    bot.application.commands.set(COMMANDS);
 
     c.inf("Successfully registed all commands!");
 }

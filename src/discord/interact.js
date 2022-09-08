@@ -1,7 +1,9 @@
-import { MessageEmbed } from 'discord.js';
+import Discord from 'discord.js';
 import c from '../logman.cjs';
 import { bot } from './index.js';
 import axios from 'axios';
+
+const { EmbedBuilder } = Discord;
 
 async function fetch_random_api(endpoint) {
     const url = `https://some-random-api.ml/animu/${endpoint}`;
@@ -22,10 +24,14 @@ async function fetch_otakugifs_api(endpoint) {
 
 async function hug(interaction) {
     const url = await fetch_random_api("hug");
-    const embed = new MessageEmbed()
+    var desc = `${interaction.__caster.name} hugs ${interaction.__target.name} (づ｡◕‿‿◕｡)づ`;
+    if (interaction.__caster.id == interaction.__target.id) {
+        desc = `${interaction.__caster.name} really needs a hug right now!\nGo on and help them to it <3 <3`;
+    }
+    const embed = new EmbedBuilder()
         .setColor(0xf218ca)
         .setTitle("Some hugs for you! <3")
-        .setDescription(`${interaction.__caster.name} hugs ${interaction.__caster.name}`)
+        .setDescription(desc)
         .setFooter({text: "<3 <3 <3"})
         .setImage(url);
 
@@ -33,11 +39,15 @@ async function hug(interaction) {
 }
 
 async function pat(interaction) {
-    const url = await fetch_random_api("hug");
-    const embed = new MessageEmbed()
+    const url = await fetch_random_api("pat");
+    var desc = `${interaction.__caster.name} pats ${interaction.__target.name} <3\nYou're amazing ${interaction.__target.name}!`;
+    if (interaction.__caster.id == interaction.__target.id) {
+        desc = `We know you are great ${interaction.__caster.name}\nHave some free pats <3 <3`;
+    }
+    const embed = new EmbedBuilder()
         .setColor(0xf218ca)
-        .setTitle("Some hugs for you! <3")
-        .setDescription(`${interaction.__caster.name} hugs ${interaction.__caster.name}`)
+        .setTitle("Some pats for you! <3")
+        .setDescription(desc)
         .setFooter({text: "<3 <3 <3"})
         .setImage(url);
 
@@ -48,11 +58,15 @@ async function pat(interaction) {
 async function gifs(interaction) {
     const gif = interaction.options.getString("gif");
     const url = await fetch_otakugifs_api(gif);
+    var desc = `${interaction.__caster.name} used ${gif} on ${interaction.__target.name}\nIt's super effective!`;
+    if (interaction.__caster.id == interaction.__target.id) {
+        desc = `${interaction.__caster.name} hurt themselves in their confusion!\nWill someone help them to a ${gif}? :3`;
+    }
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setColor(0xf218ca)
-        .setTitle(`Some ${gif}ies for you! <3`)
-        .setDescription(`${interaction.__caster.name} used ${gif} on ${interaction.__caster.name}\nIt's super effective!`)
+        .setTitle(`A ${gif} for you! <3`)
+        .setDescription(desc)
         .setFooter({text: "<3 <3 <3"})
         .setImage(url);
         interaction.reply({embeds: [embed]});
@@ -60,11 +74,11 @@ async function gifs(interaction) {
 
 
 //Dictionary of pointers to the commands
-const CommandFunctions = [
-    "hug" = hug,
-    "pat" = pat,
-    "gifs" = gifs
-];
+const CommandFunctions = {
+    "hug": hug,
+    "pat": pat,
+    "gifs": gifs
+};
 
 //Generic response function
 export async function interact(interaction) {
@@ -76,13 +90,13 @@ export async function interact(interaction) {
     if (inGuild) {
         interaction.__caster = interaction.member;
         interaction.__caster.name = interaction.__caster.displayName;
-        interaction.__caster = interaction.options.getMember("user");
-        interaction.__caster.name = interaction.__caster.displayName;
+        interaction.__target = interaction.options.getMember("user");
+        interaction.__target.name = interaction.__target.displayName;
     } else {
         interaction.__caster = interaction.user;
         interaction.__caster.name = interaction.__caster.username;
-        interaction.__caster = interaction.options.getUser("user");
-        interaction.__caster.name = interaction.__caster.username;
+        interaction.__target = interaction.options.getUser("user");
+        interaction.__target.name = interaction.__target.username;
     }
 
     //Call the appropriate function from the array
