@@ -1,0 +1,14 @@
+[Unit]
+Description=ElizaFan Discord Bot
+After=network.target
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'node /opt/node/elizafan/index.js'
+Restart=always
+User=elizafan
+Group=node
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/opt/node/elizafan
+[Install]
+WantedBy=multi-user.target
